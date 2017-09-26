@@ -17,7 +17,7 @@ static UIImageView *imageView;
 
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAppWillResignActive:)
                                                name:UIApplicationWillResignActiveNotification object:nil];
-  self.privacyScreenImage = [self.commandDelegate.settings objectForKey:[privacyScreenImage lowercaseString]]; 
+  self.privacyScreenImage = [self.commandDelegate.settings objectForKey:[@"privacyScreenImage" lowercaseString]]; 
 }
 
 - (void)onAppDidBecomeActive:(UIApplication *)application
