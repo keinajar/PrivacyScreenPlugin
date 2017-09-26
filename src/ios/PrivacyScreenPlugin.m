@@ -17,6 +17,7 @@ static UIImageView *imageView;
 
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAppWillResignActive:)
                                                name:UIApplicationWillResignActiveNotification object:nil];
+  self.privacyScreenImage = [self.commandDelegate.settings objectForKey:[privacyScreenImage lowercaseString]]; 
 }
 
 - (void)onAppDidBecomeActive:(UIApplication *)application
@@ -30,8 +31,7 @@ static UIImageView *imageView;
 
 - (void)onAppWillResignActive:(UIApplication *)application
 {
-  CDVViewController *vc = (CDVViewController*)self.viewController;
-  NSString *imgName = [self getImageName:self.viewController.interfaceOrientation delegate:(id<CDVScreenOrientationDelegate>)vc device:[self getCurrentDevice]];
+  NSString *imgName = [self getImageName];
   UIImage *splash = [UIImage imageNamed:imgName];
   if (splash == NULL) {
     imageView = NULL;
@@ -74,7 +74,18 @@ static UIImageView *imageView;
   return device;
 }
 
-- (NSString*)getImageName:(UIInterfaceOrientation)currentOrientation delegate:(id<CDVScreenOrientationDelegate>)orientationDelegate device:(CDV_iOSDevice)device
+- (NSString*)getImageName {
+    NSString *imgName;
+    if (self.privacyScreenImage != NULL) {
+        imgName = self.privacyScreenImage;
+    } else {
+        CDVViewController *vc = (CDVViewController*)self.viewController;
+        imgName = [self guessImageName:self.viewController.interfaceOrientation delegate:(id<CDVScreenOrientationDelegate>)vc device:[self getCurrentDevice]];
+    }
+    return imgName;
+}
+
+- (NSString*)guessImageName:(UIInterfaceOrientation)currentOrientation delegate:(id<CDVScreenOrientationDelegate>)orientationDelegate device:(CDV_iOSDevice)device
 {
   // Use UILaunchImageFile if specified in plist.  Otherwise, use Default.
   NSString* imageName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UILaunchImageFile"];

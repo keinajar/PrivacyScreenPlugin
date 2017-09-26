@@ -19,5 +19,5 @@ typedef struct {
 } CDV_iOSDevice;
 
 @interface PrivacyScreenPlugin : CDVPlugin
-
+@property (nonatomic) NSString *privacyScreenImage;
 @end
